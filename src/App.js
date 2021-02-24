@@ -25,13 +25,30 @@ function App() {
       setImages(result.hits);
 
       // Calcular el total de paginas
-      const calculateTotalPages = Math.ceil (result.totalHits / imagesPerPage );
+      const calculateTotalPages = Math.ceil(result.totalHits / imagesPerPage);
       setTotalPages(calculateTotalPages);
-
     };
 
     consultAPi();
   }, [search]);
+
+  const previousPage = () => {
+    const newCurrentPage = actualPage - 1;
+
+    if(newCurrentPage === 0) return;
+
+    setActualPage(newCurrentPage);
+  }
+
+  const nextPage = () => {
+    const newCurrentPage = actualPage + 1;
+
+    if(newCurrentPage > totalPages) return;
+
+    setActualPage(newCurrentPage);
+  }
+
+
 
   return (
     <div className="container">
@@ -40,9 +57,14 @@ function App() {
         <Form setSearch={setSearch} />
       </div>
       <div className="row justify-content-center">
-        <ListImages 
-          images={images}
-        />
+        <ListImages images={images} />
+
+        <button type="button" className="btn btn-info mr-1" onClick={previousPage}>
+          &laquo; Anterior
+        </button>
+        <button type="button" className="btn btn-info" onClick={nextPage}>
+          Siguiente &raquo;
+        </button>
       </div>
     </div>
   );
