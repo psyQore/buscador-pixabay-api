@@ -5,6 +5,8 @@ import ListImages from "./Components/ListImages";
 function App() {
   const [search, setSearch] = useState("");
   const [images, setImages] = useState([]);
+  const [actualPage, setActualPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const consultAPi = async () => {
@@ -21,6 +23,11 @@ function App() {
 
       //console.log(result.hits);
       setImages(result.hits);
+
+      // Calcular el total de paginas
+      const calculateTotalPages = Math.ceil (result.totalHits / imagesPerPage );
+      setTotalPages(calculateTotalPages);
+
     };
 
     consultAPi();
