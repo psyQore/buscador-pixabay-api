@@ -16,7 +16,7 @@ function App() {
       const imagesPerPage = 30;
       const key = "15075189-16dfd666eb421331112aba84d";
       const url = `
-    https://pixabay.com/api/?key=${key}&q=${search}&per_page=${imagesPerPage}`;
+    https://pixabay.com/api/?key=${key}&q=${search}&per_page=${imagesPerPage}&page=${actualPage}`;
 
       const response = await fetch(url);
       const result = await response.json();
@@ -29,26 +29,28 @@ function App() {
       setTotalPages(calculateTotalPages);
     };
 
+    // Scroll hacia arriba
+    const jumbotron = document.querySelector(".jumbotron");
+    jumbotron.scrollIntoView({ behavior: 'smooth'})
+
     consultAPi();
-  }, [search]);
+  }, [search, actualPage]);
 
   const previousPage = () => {
     const newCurrentPage = actualPage - 1;
 
-    if(newCurrentPage === 0) return;
+    if (newCurrentPage === 0) return;
 
     setActualPage(newCurrentPage);
-  }
+  };
 
   const nextPage = () => {
     const newCurrentPage = actualPage + 1;
 
-    if(newCurrentPage > totalPages) return;
+    if (newCurrentPage > totalPages) return;
 
     setActualPage(newCurrentPage);
-  }
-
-
+  };
 
   return (
     <div className="container">
@@ -56,15 +58,24 @@ function App() {
         <p className="lead text-center">Buscador de Imagenes</p>
         <Form setSearch={setSearch} />
       </div>
-      <div className="row justify-content-center">
+      <div className="row justify-content-center mb-5">
         <ListImages images={images} />
 
-        <button type="button" className="btn btn-info mr-1" onClick={previousPage}>
-          &laquo; Anterior
-        </button>
-        <button type="button" className="btn btn-info" onClick={nextPage}>
-          Siguiente &raquo;
-        </button>
+        {actualPage === 1 ? null : (
+          <button
+            type="button"
+            className="btn btn-info mr-1"
+            onClick={previousPage}
+          >
+            &laquo; Anterior
+          </button>
+        )}
+
+        {actualPage === totalPages ? null : (
+          <button type="button" className="btn btn-info" onClick={nextPage}>
+            Siguiente &raquo;
+          </button>
+        )}
       </div>
     </div>
   );
